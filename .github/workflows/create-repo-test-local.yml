@@ -1,0 +1,36 @@
+name: Create Repository Test Workflow Local
+
+on:
+  workflow_dispatch:
+    
+    inputs:
+      repo_owner:
+        description: Owner of the repository to be created
+        default: dupoiron-ops
+        type: string
+      
+      repo_name:
+        description: Name of the repository to create
+        type: string
+        required: true
+        
+      repo_visibility:
+        description: can be public or private
+        type: string
+        default: public
+
+jobs:
+  create_repo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3.5.2
+
+    - name: Create a repository
+      uses: ./
+      with:
+        repo_owner: ${{ github.event.inputs.repo_owner }}
+        repo_name: ${{ github.event.inputs.repo_name }}
+        repo_visibility: ${{ github.event.inputs.repo_visibility }}
+        token: ${{ secrets.REPO_OPS_TOKEN }}
